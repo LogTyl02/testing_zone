@@ -1,4 +1,12 @@
-class Main:								# Creating a basic Main class
+running = True          # Trying to set a variable that will switch the program off
+
+class State(object):
+	menu = 'menu'
+	play = 'play'
+	quit = 'quit'
+
+class Main:
+
 	def __init__(self, state):
 		self.state = state
 
@@ -11,18 +19,45 @@ class Main:								# Creating a basic Main class
 	def changeState(self, state):
 		self.state = state
 
-mainLoop = Main('menu') # Create a main loop object that starts with the 'menu state'
-mainLoop.displayState() # Test a function of the mainLoop object
+	def getInput(self):
+		uIn = raw_input('Gimme a state: ')
+		if uIn == 'Menu':
+			print 'OK menu'
+			self.state = State.menu
+		elif uIn == 'Quit':
+			print 'OK quit'
+			self.state = State.quit
+		elif uIn == 'Play':
+			print 'OK play'
+			self.state = State.play
+		else:
+			print 'Whatever'
+		return uIn
 
-running = True          # Trying to set a variable that will switch the program off
-state = mainLoop.state
-print state             # For testing
+	def update(self):
+		self.getInput()
 
-while running:
-	if state == 'menu':
-		print state
-		mainLoop.changeState('travel')
-	elif state == 'travel':
-		print state
-		mainLoop.changeState('quit')
-		running = False						# Infinite loop for some reason.
+	def prog_loop(self):
+		running = True
+		self.state = State.menu
+
+		while running:
+			if self.state is State.menu:
+				# Do something a menu might do
+				print "I'm doing menu-y things!"
+				self.update()
+
+			elif self.state is State.play:
+				# Throw a ball or something!
+				print "I'm throwing a penguin!"
+				self.update()
+			else:
+				# Make like a tree
+				running = False
+
+
+prog = Main(State.menu) # Create a main loop object that starts with the 'menu state'
+
+prog.prog_loop()
+
+
